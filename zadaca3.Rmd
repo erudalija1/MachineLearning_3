@@ -1,0 +1,31 @@
+---
+title: "MU_Zadaca3"
+author: "Ema Rudalija"
+date: "1/15/2022"
+output: html_document
+---
+
+
+
+Studenti:
+Amina Alagić (1966/18425), Nejra Rovčanin (1960/18480), Ema Rudalija (1974/18555)
+
+Nastavna grupa:
+Grupa 2
+
+# Zadaca 3
+## Zadatak1
+
+## a)
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
