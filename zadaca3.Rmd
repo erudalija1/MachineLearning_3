@@ -200,12 +200,16 @@ library(factoextra)
  
 podaci <- na.omit(podaci)
 
-fviz_nbclust(podaci, kmeans, method = "silhouette")
+fviz_nbclust(podaci, pam, method = "silhouette")
 
 model <- pam(podaci, k = 2, metric = "manhattan")
 plot(podaci[c("duration", "cons.price.idx")], col = model$cluster)
 plot(podaci[c("euribor3m", "duration")], col = model$cluster)
 
+model <- pam(podaci, 2, metric = "manhattan")
+sil <- silhouette(model$cluster, get_dist(newdata, method ="manhattan"))
+cat("Srednja vrijednost silhouette metrike za PAM (manhattan metrika):",mean(sil[, 3]), "\n")
+fviz_silhouette(model)
 
 ```
 ##c)
@@ -221,6 +225,11 @@ model <- kmeans(podaci, centers = 2)
 plot(podaci[c("duration", "cons.price.idx")], col = model$cluster)
 plot(podaci[c("euribor3m", "duration")], col = model$cluster)
 
+model <- kmeans(podaci, centers = 2)
+sil <- silhouette(model$cluster, get_dist(podaci, method = "manhattan"))
+cat("Srednja vrijednost silhouette metrike za kmeans:", mean(sil[, 3]),"\n")
+plot(sil, border = NA)
+
 
 ```
 ##dodatna preprocesiranja 
@@ -228,16 +237,10 @@ plot(podaci[c("euribor3m", "duration")], col = model$cluster)
 ```{r}
 library(stats)
 
-#podaci <- subset(podaci, select = -c(nr.employed))
-#podaci <- subset(podaci, select = -c(month))
-#podaci <- subset(podaci, select = -c(previous))
+
 podaci <- subset(podaci, select = -c(campaign))
-#podaci <- subset(podaci, select = -c(contact))
-#podaci <- subset(podaci, select = -c(emp.var.rate))
 podaci <- subset(podaci, select = -c(pdays))
-#podaci <- subset(podaci, select = -c(cons.price.idx))
-#podaci <- subset(podaci, select = -c(cons.conf.idx))
-#podaci <- subset(podaci, select = -c(y))
+
 
 pca <- prcomp(podaci, scale. = TRUE)
 
@@ -269,6 +272,11 @@ plot(newdata[c("PC1", "PC2")], col = model$cluster)
 plot(newdata[c("PC2", "PC4")], col = model$cluster)
 fviz_cluster(model, data = newdata)
 
+model <- kmeans(newdata, centers = 2)
+sil <- silhouette(model$cluster, get_dist(newdata))
+cat("Srednja vrijednost silhouette metrike za kmeans:", mean(sil[, 3]),"\n")
+plot(sil, border = NA)
+
 
 ```
 
@@ -279,4 +287,8 @@ plot(newdata[c("PC1", "PC2")], col = model$cluster)
 plot(newdata[c("PC2", "PC4")], col = model$cluster)
 fviz_cluster(model, data = newdata)
 
+model <- pam(newdata, 2, metric = "manhattan")
+sil <- silhouette(model$cluster, get_dist(newdata, method ="manhattan"))
+cat("Srednja vrijednost silhouette metrike za PAM (euclidean metrika):",mean(sil[, 3]))
+fviz_silhouette(model)
 ```
