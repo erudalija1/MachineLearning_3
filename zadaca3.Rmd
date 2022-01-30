@@ -207,7 +207,7 @@ plot(podaci[c("duration", "cons.price.idx")], col = model$cluster)
 plot(podaci[c("euribor3m", "duration")], col = model$cluster)
 
 model <- pam(podaci, 2, metric = "manhattan")
-sil <- silhouette(model$cluster, get_dist(newdata, method ="manhattan"))
+sil <- silhouette(model$cluster, get_dist(podaci, method ="manhattan"))
 cat("Srednja vrijednost silhouette metrike za PAM (manhattan metrika):",mean(sil[, 3]), "\n")
 fviz_silhouette(model)
 
@@ -260,7 +260,7 @@ fviz_pca_var(pca,
 
 ```{r}
 newdata <- predict(pca, podaci)
-newdata <- newdata[, 1:8]
+newdata <- newdata[, 1:10]
 newdata <- data.frame(newdata)
 
 
